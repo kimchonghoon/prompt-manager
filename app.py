@@ -200,6 +200,53 @@ def show_detail():
     print("────────────────────────────")
 
 
+def toggle_favorite():
+    """번호를 입력받아 즐겨찾기를 켜거나 끈다."""
+    print("\n=== 즐겨찾기 관리 ===")
+
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    # 어떤 번호를 고를지 목록을 먼저 보여주기
+    for i, p in enumerate(prompts, start=1):
+        star = " ⭐" if p["favorite"] else ""
+        print(f"{i}. {p['title']}{star}")
+
+    sel = input("\n프롬프트 번호 입력: ").strip()
+
+    if not sel.isdigit() or not (1 <= int(sel) <= len(prompts)):
+        print("잘못된 번호입니다.")
+        return
+
+    p = prompts[int(sel) - 1]
+
+    # 즐겨찾기 상태를 반대로 뒤집기
+    p["favorite"] = not p["favorite"]
+
+    if p["favorite"]:
+        print(f"'{p['title']}' 프롬프트를 즐겨찾기에 추가했습니다!")
+    else:
+        print(f"'{p['title']}' 프롬프트를 즐겨찾기에서 해제했습니다.")
+
+
+def show_favorites():
+    """즐겨찾기된 프롬프트만 모아서 보여준다."""
+    print("\n=== 즐겨찾기 목록 ===")
+
+    # 즐겨찾기가 켜진 것만 골라내기
+    favorites = [p for p in prompts if p["favorite"]]
+
+    if not favorites:
+        print("즐겨찾기된 프롬프트가 없습니다.")
+        return
+
+    for i, p in enumerate(favorites, start=1):
+        print(f"{i}. [{p['category']}] {p['title']} ⭐")
+
+    print(f"\n총 {len(favorites)}개의 즐겨찾기")
+
+
 def show_menu():
     """메뉴를 화면에 출력한다."""
     print("\n=== 나만의 프롬프트 관리 ===")
@@ -233,9 +280,9 @@ def main():
         elif choice == "5":
             show_detail()
         elif choice == "6":
-            print("[즐겨찾기 관리] 기능은 다음 단계에서 만듭니다.")
+            toggle_favorite()
         elif choice == "7":
-            print("[즐겨찾기 목록] 기능은 다음 단계에서 만듭니다.")
+            show_favorites()
         else:
             print("잘못된 번호입니다. 다시 선택해주세요.")
 
