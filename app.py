@@ -39,6 +39,50 @@ prompts = [
         "favorite": False
     }
 ]
+# 카테고리 목록 (여러 기능에서 공통으로 사용)
+categories = ["텍스트 생성", "이미지 생성", "영상 생성", "페르소나", "자동화", "기타"]
+
+
+def add_prompt():
+    """새 프롬프트를 입력받아 리스트에 추가한다."""
+    print("\n=== 프롬프트 추가 ===")
+
+    # 제목 입력 (비어 있으면 다시 요청)
+    while True:
+        title = input("제목: ").strip()
+        if title:
+            break
+        print("제목은 비워둘 수 없습니다. 다시 입력해주세요.")
+
+    # 내용 입력 (비어 있으면 다시 요청)
+    while True:
+        content = input("내용: ").strip()
+        if content:
+            break
+        print("내용은 비워둘 수 없습니다. 다시 입력해주세요.")
+
+    # 카테고리 선택
+    print("\n카테고리 선택:")
+    for i, name in enumerate(categories, start=1):
+        print(f"{i}) {name}")
+
+    while True:
+        sel = input("선택: ").strip()
+        if sel.isdigit() and 1 <= int(sel) <= len(categories):
+            category = categories[int(sel) - 1]
+            break
+        print("목록에 있는 번호를 입력해주세요.")
+
+    # 새 프롬프트를 딕셔너리로 만들어 리스트에 추가
+    new_prompt = {
+        "title": title,
+        "content": content,
+        "category": category,
+        "favorite": False
+    }
+    prompts.append(new_prompt)
+
+    print(f"\n'{title}' 프롬프트가 추가되었습니다!")
 
 
 def show_menu():
@@ -64,7 +108,7 @@ def main():
             print("프로그램을 종료합니다.")
             break
         elif choice == "1":
-            print("[프롬프트 추가] 기능은 다음 단계에서 만듭니다.")
+            add_prompt()
         elif choice == "2":
             print("[프롬프트 목록] 기능은 다음 단계에서 만듭니다.")
         elif choice == "3":
