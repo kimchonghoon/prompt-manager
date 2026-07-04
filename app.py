@@ -164,6 +164,42 @@ def search_prompt():
     print(f"\n{len(matched)}개의 프롬프트를 찾았습니다.")
 
 
+def show_detail():
+    """번호를 입력받아 해당 프롬프트의 전체 내용을 보여준다."""
+    print("\n=== 프롬프트 상세 보기 ===")
+
+    # 프롬프트가 없을 때
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    # 어떤 번호를 고를지 참고하도록 목록을 먼저 간단히 보여주기
+    for i, p in enumerate(prompts, start=1):
+        print(f"{i}. {p['title']}")
+
+    # 번호 입력 받기
+    sel = input("\n번호 입력: ").strip()
+
+    # 올바른 번호인지 검사
+    if not sel.isdigit() or not (1 <= int(sel) <= len(prompts)):
+        print("잘못된 번호입니다.")
+        return
+
+    # 선택한 프롬프트 꺼내기 (사람이 세는 번호는 1부터, 리스트는 0부터라 -1)
+    p = prompts[int(sel) - 1]
+    star = "⭐" if p["favorite"] else "없음"
+
+    # 상세 정보 출력
+    print("\n────────────────────────────")
+    print(f"제목: {p['title']}")
+    print(f"카테고리: {p['category']}")
+    print(f"즐겨찾기: {star}")
+    print("────────────────────────────")
+    print("내용:")
+    print(p["content"])
+    print("────────────────────────────")
+
+
 def show_menu():
     """메뉴를 화면에 출력한다."""
     print("\n=== 나만의 프롬프트 관리 ===")
@@ -195,7 +231,7 @@ def main():
         elif choice == "4":
             search_prompt()
         elif choice == "5":
-            print("[프롬프트 상세 보기] 기능은 다음 단계에서 만듭니다.")
+            show_detail()
         elif choice == "6":
             print("[즐겨찾기 관리] 기능은 다음 단계에서 만듭니다.")
         elif choice == "7":
