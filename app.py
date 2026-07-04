@@ -102,6 +102,38 @@ def show_list():
     print(f"\n총 {len(prompts)}개의 프롬프트")
 
 
+def show_by_category():
+    """카테고리를 선택하면 해당 카테고리의 프롬프트만 출력한다."""
+    print("\n=== 카테고리별 조회 ===")
+
+    # 카테고리 목록을 번호와 함께 보여주기
+    for i, name in enumerate(categories, start=1):
+        print(f"{i}) {name}")
+
+    # 카테고리 선택 받기
+    while True:
+        sel = input("선택: ").strip()
+        if sel.isdigit() and 1 <= int(sel) <= len(categories):
+            chosen = categories[int(sel) - 1]
+            break
+        print("목록에 있는 번호를 입력해주세요.")
+
+    # 선택한 카테고리에 속한 프롬프트만 골라내기
+    matched = [p for p in prompts if p["category"] == chosen]
+
+    print(f"\n[{chosen}] 카테고리 프롬프트:")
+
+    if not matched:
+        print("해당 카테고리에 등록된 프롬프트가 없습니다.")
+        return
+
+    for i, p in enumerate(matched, start=1):
+        star = " ⭐" if p["favorite"] else ""
+        print(f"{i}. {p['title']}{star}")
+
+    print(f"\n총 {len(matched)}개의 프롬프트")
+
+
 def show_menu():
     """메뉴를 화면에 출력한다."""
     print("\n=== 나만의 프롬프트 관리 ===")
@@ -129,7 +161,7 @@ def main():
         elif choice == "2":
             show_list()
         elif choice == "3":
-            print("[카테고리별 조회] 기능은 다음 단계에서 만듭니다.")
+            show_by_category()
         elif choice == "4":
             print("[프롬프트 검색] 기능은 다음 단계에서 만듭니다.")
         elif choice == "5":
